@@ -2,6 +2,14 @@
 Thumbs.db
 ehthumbs.db
 
+*.json
+*.pdf
+myXml.xml
+*/target
+*/.settings
+*/.project
+*/.classpath
+
 # Folder config file
 Desktop.ini
 

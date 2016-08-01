@@ -1,0 +1,5 @@
+服务端编译启动命令：
+mvn  compile exec:java -Dexec.mainClass=com.hand.Exam2.SocketServer
+
+服务端编译启动命令：
+mvn  compile exec:java -Dexec.mainClass=com.hand.Exam2.SocketClient
