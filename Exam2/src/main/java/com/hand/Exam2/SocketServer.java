@@ -23,7 +23,7 @@ public class SocketServer {
 		File file =new File("exam.pdf");
 		SocketServer server=new SocketServer();
 		try {
-			ServerSocket serverSocket = new ServerSocket(12345,10,InetAddress.getByName("10.211.119.221"));
+			ServerSocket serverSocket = new ServerSocket(12345,10,InetAddress.getByName("127.0.0.1"));
 			while(true){
 				Socket socket=serverSocket.accept();
 				JOptionPane.showMessageDialog(null,"有客户端链接到12345端口");

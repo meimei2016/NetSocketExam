@@ -26,7 +26,7 @@ public class SocketClient {
 		try {
 			
 			
-			Socket socket=new Socket("10.211.119.221",12345);			
+			Socket socket=new Socket("127.0.0.1",12345);			
 			BufferedInputStream bis=new BufferedInputStream(socket.getInputStream());
 			BufferedOutputStream bos=new BufferedOutputStream(new FileOutputStream(file));
 			int s=0;
