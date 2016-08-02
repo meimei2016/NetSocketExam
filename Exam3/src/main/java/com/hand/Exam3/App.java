@@ -1,7 +1,10 @@
 package com.hand.Exam3;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -21,13 +24,14 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.google.gson.JsonObject;
+
 
 public class App {
 
     public static void main( String[] args ){
     	App app =new App();
-    	try {
-    		
+    	try {  		
 			URL url=new URL("http://hq.sinajs.cn/list=sz300170");
 			InputStream is=url.openConnection().getInputStream();
 			InputStreamReader isr=new InputStreamReader(is,"gbk");
@@ -39,6 +43,7 @@ public class App {
 			}
 			String s[]=builder.toString().split(",");
 			app.createXML(s);
+			app.createJson(s);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -67,7 +72,7 @@ public void createXML(String str[]){
 			Element stock=document.createElement("stock");
 			
 			Element name=document.createElement("name");
-			name.setTextContent(str[0]);
+			name.setTextContent(str[0].substring(str[0].indexOf('"')+1));
 			Element open=document.createElement("open");
 			open.setTextContent(str[1]);
 			
@@ -92,9 +97,6 @@ public void createXML(String str[]){
 			TransformerFactory transformerFactory =TransformerFactory.newInstance();
 			Transformer transformer=transformerFactory.newTransformer();
 			transformer.transform(new DOMSource(document), new StreamResult("myXml.xml"));
-			/*StringWriter writer=new StringWriter();
-			transformer.transform(new DOMSource(document), new StreamResult(writer));
-			System.out.println(writer);*/
 		
 		} catch (ParserConfigurationException e) {			
 			e.printStackTrace();
@@ -103,6 +105,36 @@ public void createXML(String str[]){
 		} catch (TransformerException e) {
 			e.printStackTrace();
 		}
-		
+	}
+
+	public void createJson(String str[]){
+		File file=new File("myJson.json");
+		if(!file.exists()){
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		JsonObject obj=new JsonObject();
+		obj.addProperty("name",str[0].substring(str[0].indexOf('"')+1));		
+		obj.addProperty("open",Double.parseDouble(str[1]));
+		obj.addProperty("close",Double.parseDouble(str[2]));
+		obj.addProperty("current",Double.parseDouble(str[3]));
+		obj.addProperty("high",Double.parseDouble(str[4]));
+		obj.addProperty("low",Double.parseDouble(str[5]));
+		FileOutputStream fos=null;
+		BufferedOutputStream bos=null;
+		try {
+			fos = new FileOutputStream(file);
+			bos=new BufferedOutputStream(fos);
+			byte[] b=obj.toString().getBytes();
+			fos.write(b,0,b.length);
+			fos.close();bos.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
 	}
 }

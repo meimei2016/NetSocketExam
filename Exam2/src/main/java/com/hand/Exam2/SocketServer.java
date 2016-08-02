@@ -1,7 +1,11 @@
 package com.hand.Exam2;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -33,18 +37,17 @@ public class SocketServer {
 
 	}
 	public void send(Socket socket,File file){		
-		BufferedReader br=null;
-		String str =null;
-		PrintWriter writer;
+		BufferedInputStream bis=null;
+		BufferedOutputStream bos=null;
+		int i=0;
 		try {
-			br= new BufferedReader(new FileReader(file));
-			writer = new PrintWriter(socket.getOutputStream());
-			while((str=br.readLine())!=null){
-				writer.println(str);
-				System.out.println(str);
+			bis=new BufferedInputStream(new FileInputStream(file));
+			bos=new BufferedOutputStream(socket.getOutputStream());
+			while((i=bis.read())!=0){
+				bos.write(i);
 			}			
-			writer.flush();
-			br.close();
+			bos.flush();
+			bis.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

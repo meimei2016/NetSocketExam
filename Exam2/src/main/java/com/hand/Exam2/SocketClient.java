@@ -1,7 +1,11 @@
 package com.hand.Exam2;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,16 +24,18 @@ public class SocketClient {
 			}
 		}
 		try {
-			FileWriter writter = new FileWriter(file, true);
+			
+			
 			Socket socket=new Socket("10.211.119.221",12345);			
-			BufferedReader br=new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			String s=null;
-			while((s=br.readLine())!=null){
-				writter.write(s);
+			BufferedInputStream bis=new BufferedInputStream(socket.getInputStream());
+			BufferedOutputStream bos=new BufferedOutputStream(new FileOutputStream(file));
+			int s=0;
+			while((s=bis.read())!=0){
+				bos.write(s);
 			}
 			
-			br.close();
-			writter.close();
+			bos.close();
+			bis.close();
 			socket.close();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
